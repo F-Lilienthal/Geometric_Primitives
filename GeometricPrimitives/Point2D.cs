@@ -27,6 +27,11 @@ namespace GeometricPrimitives
             }
         }
 
+        public Point2D Clone()
+        {
+            return new Point2D(X, Y);
+        }
+
         public void Shift(double shiftX, double shiftY)
         {
             X += shiftX;
