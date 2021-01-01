@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace GeometricPrimitives.UnitTests
 {
+    [TestFixture]
     class Line2DTests
     {
         [TestCase(5, 0)]
