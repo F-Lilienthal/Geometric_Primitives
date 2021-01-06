@@ -10,6 +10,35 @@ namespace GeometricPrimitives
         public Point2D Center { get; }
         public double Length { get; }
 
+        public override double XMin
+        {
+            get
+            {
+                return Math.Min(PointList[0].X, PointList[1].X);
+            }
+        }
+        public override double XMax
+        {
+            get
+            {
+                return Math.Max(PointList[0].X, PointList[1].X);
+            }
+        }
+        public override double YMin
+        {
+            get
+            {
+                return Math.Min(PointList[0].Y, PointList[1].Y);
+            }
+        }
+        public override double YMax
+        {
+            get
+            {
+                return Math.Max(PointList[0].Y, PointList[1].Y);
+            }
+        }
+
         public LineSegment2D(Point2D point1, Point2D point2)
         {
             PointList = new List<Point2D>
