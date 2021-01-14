@@ -36,12 +36,13 @@ namespace GeometricPrimitives.UnitTests
             Assert.IsFalse(lineSegment1.Equals(lineSegment2));
         }
 
-        [Test]
-        public void GetCenter()
+        [TestCase(0, 0, 10, 0, 5, 0)]
+        [TestCase(4, 8, 19, 37, 11.5, 22.5)]
+        public void GetCenter(double x1, double y1, double x2, double y2, double centerX, double centerY)
         {
-            LineSegment2D lineSegment = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 0));
+            LineSegment2D lineSegment = new LineSegment2D(new Point2D(x1, y1), new Point2D(x2, y2));
 
-            Point2D centerExpected = new Point2D(5, 0);
+            Point2D centerExpected = new Point2D(centerX, centerY);
             Point2D centerActual = lineSegment.Center;
 
             Assert.That(centerExpected.Equals(centerActual));
