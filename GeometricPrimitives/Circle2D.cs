@@ -46,6 +46,7 @@ namespace GeometricPrimitives
             Radius = radius;
 
             Area = CalcArea();
+            Perimeter = CalcPerimeter();
         }
 
         public override bool Equals(Shape2D circle, double epsilon = 1e-5)
@@ -63,6 +64,11 @@ namespace GeometricPrimitives
         private double CalcArea()
         {
             return Math.PI * Radius * Radius;
-        }        
+        }
+
+        private double CalcPerimeter()
+        {
+            return 2 * Math.PI * Radius;
+        }
     }
 }
