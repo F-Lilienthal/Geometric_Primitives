@@ -8,6 +8,8 @@ namespace GeometricPrimitives
     {
         public readonly Point2D Center;
         public readonly double Radius;
+        public double Area { get; }
+        public double Perimeter { get; }
         public override double XMin
         {
             get
@@ -42,6 +44,8 @@ namespace GeometricPrimitives
         {
             Center = center;
             Radius = radius;
+
+            Area = CalcArea();
         }
 
         public override bool Equals(Shape2D circle, double epsilon = 1e-5)
@@ -55,5 +59,10 @@ namespace GeometricPrimitives
                 return false;
             }
         }
+
+        private double CalcArea()
+        {
+            return Math.PI * Radius * Radius;
+        }        
     }
 }
