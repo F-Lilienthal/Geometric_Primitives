@@ -96,8 +96,8 @@ namespace GeometricPrimitives
                 {
                     return Signum.Zero;
                 }
-                else if (Utilities.LessThanValue(px, 0) || Utilities.LessThanValue(py, 0) ||
-                         Utilities.GreaterThanValue(px, r1x) || Utilities.GreaterThanValue(py, r1y))
+                else if (Utilities.LessThanValue(px / r1x, 0) || Utilities.LessThanValue(py / r1y, 0) ||
+                         Utilities.GreaterThanValue(px / r1x, 1) || Utilities.GreaterThanValue(py / r1y, 1))
                 {
                     return Signum.Negative;
                 }
@@ -109,6 +109,25 @@ namespace GeometricPrimitives
             else
             {
                 return Signum.Negative;
+            }
+        }
+
+        public bool TryFindIdenticalPoint(LineSegment2D lineSegment, out Point2D point)
+        {
+            if (PointList[0].Equals(lineSegment.PointList[0]) || PointList[0].Equals(lineSegment.PointList[1]))
+            {
+                point = PointList[0];
+                return true;
+            }
+            else if (PointList[1].Equals(lineSegment.PointList[0]) || PointList[1].Equals(lineSegment.PointList[1]))
+            {
+                point = PointList[1];
+                return true;
+            }
+            else
+            {
+                point = null;
+                return false;
             }
         }
 
@@ -130,7 +149,22 @@ namespace GeometricPrimitives
 
         public Shape2D IntersectingShape(LineSegment2D lineSegment)
         {
-            return new EmptyShape2D();
+            if (Equals(lineSegment))
+            {
+                return new LineSegment2D(PointList[0].Clone(), PointList[1].Clone());
+            }
+            else if (TryFindIdenticalPoint(lineSegment, out Point2D point))
+            {
+                return point.Clone();
+            }
+            else if (IsOnSameLine(lineSegment))
+            {
+                return IntersectingShapeOnLine(lineSegment);
+            }
+            else
+            {
+                return new EmptyShape2D();
+            }
         }
 
         public Shape2D IntersectingShape(Ray2D ray)
@@ -190,6 +224,38 @@ namespace GeometricPrimitives
                 {
                     return new LineSegment2D(ray.Position, PointList[1]);
                 }
+            }
+            else
+            {
+                return new EmptyShape2D();
+            }
+        }
+
+        private Shape2D IntersectingShapeOnLine(LineSegment2D lineSegment)
+        {
+            if ((HasInside(lineSegment.PointList[0]) != Signum.Negative) && (HasInside(lineSegment.PointList[1]) != Signum.Negative))
+            {
+                return lineSegment.Clone();
+            }
+            else if ((lineSegment.HasInside(PointList[0]) != Signum.Negative) && (lineSegment.HasInside(PointList[1]) != Signum.Negative))
+            {
+                return Clone();
+            }
+            else if ((HasInside(lineSegment.PointList[0]) != Signum.Negative) && (lineSegment.HasInside(PointList[0]) != Signum.Negative))
+            {
+                return new LineSegment2D(lineSegment.PointList[0], PointList[0]);
+            }
+            else if ((HasInside(lineSegment.PointList[1]) != Signum.Negative) && (lineSegment.HasInside(PointList[0]) != Signum.Negative))
+            {
+                return new LineSegment2D(lineSegment.PointList[1], PointList[0]);
+            }
+            else if ((HasInside(lineSegment.PointList[0]) != Signum.Negative) && (lineSegment.HasInside(PointList[1]) != Signum.Negative))
+            {
+                return new LineSegment2D(lineSegment.PointList[0], PointList[1]);
+            }
+            else if ((HasInside(lineSegment.PointList[1]) != Signum.Negative) && (lineSegment.HasInside(PointList[1]) != Signum.Negative))
+            {
+                return new LineSegment2D(lineSegment.PointList[1], PointList[1]);
             }
             else
             {
