@@ -56,13 +56,36 @@ namespace GeometricPrimitives.UnitTests
             Assert.That(TestUtil.IsSameValue(lineSegment.Length, 22.3606798));
         }
 
-        [Test]
-        public void HasInside_PointInside_ExpectedPositve()
+        [TestCase(0)]
+        [TestCase(1)]
+        public void HasInside_PointInside_ExpectedPositve(int exampleID)
         {
-            LineSegment2D lineSegment = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 0));
-            Point2D point = new Point2D(5, 0);
+            (LineSegment2D, Point2D) values = InitValues_HasInside_PointInside(exampleID);
+
+            LineSegment2D lineSegment = values.Item1;
+            Point2D point = values.Item2;
 
             Assert.That(lineSegment.HasInside(point) == Signum.Positive);
+        }
+
+        private (LineSegment2D, Point2D) InitValues_HasInside_PointInside(int exampleID)
+        {
+            LineSegment2D lineSegment;
+            Point2D point;
+
+            switch (exampleID)
+            {
+                case 0:
+                    lineSegment = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 0));
+                    point = new Point2D(5, 0);
+                    return (lineSegment, point);
+                case 1:
+                    lineSegment = new LineSegment2D(new Point2D(15, 15), new Point2D(5, 5));
+                    point = new Point2D(10, 10);
+                    return (lineSegment, point);
+                default:
+                    return InitValues_HasInside_PointInside(0);
+            }
         }
 
         [TestCase(5, 5)]
@@ -219,28 +242,90 @@ namespace GeometricPrimitives.UnitTests
             Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
         }
 
-        [Test]
-        public void IntersectingShapeWithLineSegment_OverlapCompletlyInside_ExpectedLineSegment()
+        [TestCase(0)]
+        [TestCase(1)]
+        public void IntersectingShapeWithLineSegment_OverlapCompletlyInside_ExpectedLineSegment(int exampleID)
         {
-            LineSegment2D lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
-            LineSegment2D lineSegment2 = new LineSegment2D(new Point2D(2, 2), new Point2D(5, 5));
-            Shape2D expectedIntersectingShape = new LineSegment2D(new Point2D(2, 2), new Point2D(5, 5));
+            (LineSegment2D, LineSegment2D, LineSegment2D) values = InitValues_IntersectingShapeWithLineSegment_OverlapCompletlyInside(exampleID);
+            LineSegment2D lineSegment1 = values.Item1;
+            LineSegment2D lineSegment2 = values.Item2;
+            Shape2D expectedIntersectingShape = values.Item3;
 
             Shape2D actualIntersectingShape = lineSegment1.IntersectingShape(lineSegment2);
 
             Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
         }
 
-        [Test]
-        public void IntersectingShapeWithLineSegment_PartialOverlap_ExpectedLineSegment()
+        private (LineSegment2D, LineSegment2D, LineSegment2D) InitValues_IntersectingShapeWithLineSegment_OverlapCompletlyInside(int exampleID)
         {
-            LineSegment2D lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
-            LineSegment2D lineSegment2 = new LineSegment2D(new Point2D(2, 2), new Point2D(18, 18));
-            Shape2D expectedIntersectingShape = new LineSegment2D(new Point2D(2, 2), new Point2D(10, 10));
+            LineSegment2D lineSegment1;
+            LineSegment2D lineSegment2;
+            LineSegment2D expectedIntersectingShape;
+
+            switch (exampleID)
+            {
+                case 0:
+                    lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+                    lineSegment2 = new LineSegment2D(new Point2D(2, 2), new Point2D(5, 5));
+                    expectedIntersectingShape = new LineSegment2D(new Point2D(2, 2), new Point2D(5, 5));
+                    return (lineSegment1, lineSegment2, expectedIntersectingShape);
+                case 1:
+                    lineSegment1 = new LineSegment2D(new Point2D(4, 6), new Point2D(12, 18));
+                    lineSegment2 = new LineSegment2D(new Point2D(-2, -3), new Point2D(16, 24));
+                    expectedIntersectingShape = new LineSegment2D(new Point2D(4, 6), new Point2D(12, 18));
+                    return (lineSegment1, lineSegment2, expectedIntersectingShape);
+                default:
+                    return InitValues_IntersectingShapeWithLineSegment_OverlapCompletlyInside(0);                    
+            }
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void IntersectingShapeWithLineSegment_PartialOverlap_ExpectedLineSegment(int exampleID)
+        {
+            (LineSegment2D, LineSegment2D, LineSegment2D) values = InitValues_IntersectingShapeWithLineSegment_PartialOverlap(exampleID);
+            LineSegment2D lineSegment1 = values.Item1;
+            LineSegment2D lineSegment2 = values.Item2;
+            Shape2D expectedIntersectingShape = values.Item3;
 
             Shape2D actualIntersectingShape = lineSegment1.IntersectingShape(lineSegment2);
 
             Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
+        }
+
+        private (LineSegment2D, LineSegment2D, LineSegment2D) InitValues_IntersectingShapeWithLineSegment_PartialOverlap(int exampleID)
+        {
+            LineSegment2D lineSegment1;
+            LineSegment2D lineSegment2;
+            LineSegment2D expectedIntersectingShape;
+
+            switch (exampleID)
+            {
+                case 0:
+                    lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+                    lineSegment2 = new LineSegment2D(new Point2D(5, 5), new Point2D(15, 15));
+                    expectedIntersectingShape = new LineSegment2D(new Point2D(5, 5), new Point2D(10, 10));
+                    return (lineSegment1, lineSegment2, expectedIntersectingShape);
+                case 1:
+                    lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+                    lineSegment2 = new LineSegment2D(new Point2D(15, 15), new Point2D(5, 5));
+                    expectedIntersectingShape = new LineSegment2D(new Point2D(10, 10), new Point2D(5, 5));
+                    return (lineSegment1, lineSegment2, expectedIntersectingShape);
+                case 2:
+                    lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+                    lineSegment2 = new LineSegment2D(new Point2D(-5, -5), new Point2D(5, 5));
+                    expectedIntersectingShape = new LineSegment2D(new Point2D(0, 0), new Point2D(5, 5));
+                    return (lineSegment1, lineSegment2, expectedIntersectingShape);
+                case 3:
+                    lineSegment1 = new LineSegment2D(new Point2D(10, 10), new Point2D(0, 0));
+                    lineSegment2 = new LineSegment2D(new Point2D(-5, -5), new Point2D(5, 5));
+                    expectedIntersectingShape = new LineSegment2D(new Point2D(0, 0), new Point2D(5, 5));
+                    return (lineSegment1, lineSegment2, expectedIntersectingShape);
+                default:
+                    return InitValues_IntersectingShapeWithLineSegment_OverlapCompletlyInside(0);
+            }
         }
 
         [Test]
