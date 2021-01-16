@@ -182,5 +182,89 @@ namespace GeometricPrimitives.UnitTests
 
             Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
         }
+
+        [Test]
+        public void IntersectingShapeWithLineSegment_NormalIntersection_ExpectedPoint()
+        {
+            LineSegment2D lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+            LineSegment2D lineSegment2 = new LineSegment2D(new Point2D(0, 10), new Point2D(10, 0));
+            Shape2D expectedIntersectingShape = new Point2D(5,5);
+
+            Shape2D actualIntersectingShape = lineSegment1.IntersectingShape(lineSegment2);
+
+            Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
+        }
+
+        [Test]
+        public void IntersectingShapeWithLineSegment_TouchingPoint_ExpectedPoint()
+        {
+            LineSegment2D lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+            LineSegment2D lineSegment2 = new LineSegment2D(new Point2D(0, 10), new Point2D(5, 5));
+            Shape2D expectedIntersectingShape = new Point2D(5, 5);
+
+            Shape2D actualIntersectingShape = lineSegment1.IntersectingShape(lineSegment2);
+
+            Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
+        }
+
+        [Test]
+        public void IntersectingShapeWithLineSegment_OneIdenticalEndPoint_ExpectedPoint()
+        {
+            LineSegment2D lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+            LineSegment2D lineSegment2 = new LineSegment2D(new Point2D(10, 10), new Point2D(20, 0));
+            Shape2D expectedIntersectingShape = new Point2D(10, 10);
+
+            Shape2D actualIntersectingShape = lineSegment1.IntersectingShape(lineSegment2);
+
+            Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
+        }
+
+        [Test]
+        public void IntersectingShapeWithLineSegment_OverlapCompletlyInside_ExpectedLineSegment()
+        {
+            LineSegment2D lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+            LineSegment2D lineSegment2 = new LineSegment2D(new Point2D(2, 2), new Point2D(5, 5));
+            Shape2D expectedIntersectingShape = new LineSegment2D(new Point2D(2, 2), new Point2D(5, 5));
+
+            Shape2D actualIntersectingShape = lineSegment1.IntersectingShape(lineSegment2);
+
+            Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
+        }
+
+        [Test]
+        public void IntersectingShapeWithLineSegment_PartialOverlap_ExpectedLineSegment()
+        {
+            LineSegment2D lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+            LineSegment2D lineSegment2 = new LineSegment2D(new Point2D(2, 2), new Point2D(18, 18));
+            Shape2D expectedIntersectingShape = new LineSegment2D(new Point2D(2, 2), new Point2D(10, 10));
+
+            Shape2D actualIntersectingShape = lineSegment1.IntersectingShape(lineSegment2);
+
+            Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
+        }
+
+        [Test]
+        public void IntersectingShapeWithLineSegment_IdenticalSegments_ExpectedLineSegment()
+        {
+            LineSegment2D lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+            LineSegment2D lineSegment2 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+            Shape2D expectedIntersectingShape = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+
+            Shape2D actualIntersectingShape = lineSegment1.IntersectingShape(lineSegment2);
+
+            Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
+        }
+
+        [Test]
+        public void IntersectingShapeWithLineSegment_NoIntersection_ExpectedEmptyShape()
+        {
+            LineSegment2D lineSegment1 = new LineSegment2D(new Point2D(0, 0), new Point2D(10, 10));
+            LineSegment2D lineSegment2 = new LineSegment2D(new Point2D(40, 40), new Point2D(30, 50));
+            Shape2D expectedIntersectingShape = new EmptyShape2D();
+
+            Shape2D actualIntersectingShape = lineSegment1.IntersectingShape(lineSegment2);
+
+            Assert.That(expectedIntersectingShape.Equals(actualIntersectingShape));
+        }
     }
 }
