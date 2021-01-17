@@ -147,6 +147,18 @@ namespace GeometricPrimitives
                    (line.HasInside(PointList[1]) == Signum.Positive);
         }
 
+        public override Shape2D IntersectingShape(Shape2D shape)
+        {
+            if (shape is LineSegment2D lineSegment)
+            {
+                return IntersectingShape(lineSegment);
+            }
+            else
+            {
+                return new EmptyShape2D();
+            }
+        }
+
         public Shape2D IntersectingShape(LineSegment2D lineSegment)
         {
             if (Equals(lineSegment))
