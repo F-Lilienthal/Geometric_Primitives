@@ -163,7 +163,7 @@ namespace GeometricPrimitives
             }
             else
             {
-                return new EmptyShape2D();
+                return IntersectingShapeGenericCase(lineSegment);
             }
         }
 
@@ -256,6 +256,31 @@ namespace GeometricPrimitives
             else if ((HasInside(lineSegment.PointList[1]) != Signum.Negative) && (lineSegment.HasInside(PointList[1]) != Signum.Negative))
             {
                 return new LineSegment2D(lineSegment.PointList[1], PointList[1]);
+            }
+            else
+            {
+                return new EmptyShape2D();
+            }
+        }
+
+        private Shape2D IntersectingShapeGenericCase(LineSegment2D lineSegment)
+        {
+            double r0x = PointList[0].X;
+            double r0y = PointList[0].Y;
+            double r1x = PointList[1].X - PointList[0].X;
+            double r1y = PointList[1].Y - PointList[0].Y;
+            double s0x = lineSegment.PointList[0].X;
+            double s0y = lineSegment.PointList[0].Y;
+            double s1x = lineSegment.PointList[1].X - lineSegment.PointList[0].X;
+            double s1y = lineSegment.PointList[1].Y - lineSegment.PointList[0].Y;
+
+            double u = (s1x * (s0y - r0y) - s0x * s1y + r0x * s1y) / (r1y * s1x - r1x * s1y);
+            double v = (r1x * (s0y - r0y) - s0x * r1y + r0x * r1y) / (r1y * s1x - r1x * s1y);
+
+            if (!Utilities.LessThanValue(u, 0) && !Utilities.GreaterThanValue(u, 1) &&
+                !Utilities.LessThanValue(v, 0) && !Utilities.GreaterThanValue(v, 1))
+            {
+                return new Point2D(r0x + u * r1x, r0y + u * r1y);
             }
             else
             {
